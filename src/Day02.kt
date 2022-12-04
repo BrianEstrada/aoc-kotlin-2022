@@ -2,46 +2,46 @@ fun main() {
 
     // Test Case
     val testInput = readInput("Day02_test")
-    val part1TestResult = part1(testInput)
+    val part1TestResult = Day02.part1(testInput)
     println(part1TestResult)
     check(part1TestResult == 15)
 
-    val part2TestResult = part2(testInput)
+    val part2TestResult = Day02.part2(testInput)
     println(part2TestResult)
     check(part2TestResult == 12)
 
     // Actual Case
     val input = readInput("Day02")
-    println("Part 1: " + part1(input))
-    println("Part 2: " + part2(input))
+    println("Part 1: " + Day02.part1(input))
+    println("Part 2: " + Day02.part2(input))
 }
 
-fun part1(input: List<String>): Int {
-    return input.sumOf { line ->
-        val (firstMove, secondMove) = line.split(" ")
-        val shape1 = Day02.Shape.fromString(firstMove)
-        val shape2 = Day02.Shape.fromString(secondMove)
-        val result = Day02().fight(shape1, shape2)
-        result.points + shape2.points
+
+private object Day02 {
+
+    fun part1(input: List<String>): Int {
+        return input.sumOf { line ->
+            val (firstMove, secondMove) = line.split(" ")
+            val shape1 = Shape.fromString(firstMove)
+            val shape2 = Shape.fromString(secondMove)
+            val result = fight(shape1, shape2)
+            result.points + shape2.points
+        }
     }
-}
 
-fun part2(input: List<String>): Int {
-    return input.sumOf { line ->
-        val (firstMove, secondMove) = line.split(" ")
-        val expectedResult = Day02.Result.fromString(secondMove)
-        val shape2 = Day02().riggedFight(
-            shape1 = Day02.Shape.fromString(firstMove),
-            expectedResult = expectedResult
-        )
-        shape2.points + expectedResult.points
+    fun part2(input: List<String>): Int {
+        return input.sumOf { line ->
+            val (firstMove, secondMove) = line.split(" ")
+            val expectedResult = Result.fromString(secondMove)
+            val shape2 = riggedFight(
+                shape1 = Shape.fromString(firstMove),
+                expectedResult = expectedResult
+            )
+            shape2.points + expectedResult.points
+        }
     }
-}
 
-
-private class Day02 {
-
-    fun fight(shape1: Shape, shape2: Shape): Result {
+    private fun fight(shape1: Shape, shape2: Shape): Result {
         return when {
             shape1 == shape2 -> {
                 Result.Tie
@@ -57,7 +57,7 @@ private class Day02 {
         }
     }
 
-    fun riggedFight(shape1: Shape, expectedResult: Result): Shape {
+    private fun riggedFight(shape1: Shape, expectedResult: Result): Shape {
         return when (expectedResult) {
             Result.Win -> shape1.losesAgainst()
             Result.Tie -> shape1
